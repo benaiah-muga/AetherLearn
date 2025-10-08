@@ -1,0 +1,7 @@
+{
+  "name": "AetherLearn: An AI-Powered Learning Co-Pilot",
+  "description": "AetherLearn is a next-generation chatbot that transforms how students learn by creating interactive, personalized learning experiences from any document. Upload a PDF to instantly generate a dynamic, interactive quiz with adaptive questions and AI-powered explanations.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
