@@ -69,8 +69,8 @@ Badges are designed to reward effort, consistency, mastery, and curiosity.
 To run this project locally, you will need to set up an environment variable for the Google Gemini API key.
 
 1.  Create a `.env` file in the root of the project.
-2.  Add your API key to the file:
+2.  Add your API key to the file, prefixed with `VITE_`:
     ```
-    API_KEY=YOUR_GEMINI_API_KEY
+    VITE_API_KEY=YOUR_GEMINI_API_KEY
     ```
-3.  The application will automatically pick up this key.
+3.  The application build process will automatically pick up this key. For deployment on services like Vercel, you must also set `VITE_API_KEY` in the project's environment variable settings.

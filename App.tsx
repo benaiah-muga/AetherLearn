@@ -95,9 +95,8 @@ const App: React.FC = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    if (process.env.API_KEY) {
-      aiRef.current = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    }
+    // FIX: The API key must be obtained exclusively from `process.env.API_KEY` and is assumed to be available.
+    aiRef.current = new GoogleGenAI({ apiKey: process.env.API_KEY });
   }, []);
 
   // --- State Persistence Effects ---

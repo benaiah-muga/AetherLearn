@@ -2,6 +2,7 @@
 import { GoogleGenAI, Type, FunctionDeclaration } from "@google/genai";
 import { Quiz, Difficulty, Question, QuizQuestionTypePreference } from '../types';
 
+// FIX: The API key must be obtained exclusively from `process.env.API_KEY`.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const QUIZ_SCHEMA = {
