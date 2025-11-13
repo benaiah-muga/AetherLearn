@@ -49,17 +49,45 @@ const App: React.FC = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   
-  // History, Badges & Sidebar State
-  const [quizHistory, setQuizHistory] = useState<QuizHistoryItem[]>([]);
+  // History, Badges & Sidebar State (with localStorage persistence)
+  const [quizHistory, setQuizHistory] = useState<QuizHistoryItem[]>(() => {
+    try {
+        const saved = localStorage.getItem('aetherlearn_quizHistory');
+        return saved ? JSON.parse(saved) : [];
+    } catch {
+        return [];
+    }
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [earnedBadges, setEarnedBadges] = useState<Set<BadgeId>>(new Set());
+  const [earnedBadges, setEarnedBadges] = useState<Set<BadgeId>>(() => {
+    try {
+        const saved = localStorage.getItem('aetherlearn_earnedBadges');
+        return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+        return new Set();
+    }
+  });
   const [newlyEarnedBadges, setNewlyEarnedBadges] = useState<BadgeId[]>([]);
-  const [usedQuestionPreferences, setUsedQuestionPreferences] = useState<Set<QuizQuestionTypePreference>>(new Set());
+  const [usedQuestionPreferences, setUsedQuestionPreferences] = useState<Set<QuizQuestionTypePreference>>(() => {
+    try {
+        const saved = localStorage.getItem('aetherlearn_usedQuestionPreferences');
+        return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+        return new Set();
+    }
+  });
 
   // Chat Agent State
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isChatLoading, setIsChatLoading] = useState(false);
-  const [agentPersonality, setAgentPersonality] = useState<AgentPersonality>('Aether');
+  const [agentPersonality, setAgentPersonality] = useState<AgentPersonality>(() => {
+    try {
+        const saved = localStorage.getItem('aetherlearn_agentPersonality');
+        return saved ? (saved as AgentPersonality) : 'Aether';
+    } catch {
+        return 'Aether';
+    }
+  });
   const [references, setReferences] = useState<Reference[]>([]);
   const aiRef = useRef<GoogleGenAI | null>(null);
 
@@ -71,6 +99,40 @@ const App: React.FC = () => {
       aiRef.current = new GoogleGenAI({ apiKey: process.env.API_KEY });
     }
   }, []);
+
+  // --- State Persistence Effects ---
+  useEffect(() => {
+    try {
+        localStorage.setItem('aetherlearn_quizHistory', JSON.stringify(quizHistory));
+    } catch (e) {
+        console.error("Failed to save quiz history:", e);
+    }
+  }, [quizHistory]);
+
+  useEffect(() => {
+    try {
+        localStorage.setItem('aetherlearn_earnedBadges', JSON.stringify(Array.from(earnedBadges)));
+    } catch (e) {
+        console.error("Failed to save earned badges:", e);
+    }
+  }, [earnedBadges]);
+
+  useEffect(() => {
+    try {
+        localStorage.setItem('aetherlearn_usedQuestionPreferences', JSON.stringify(Array.from(usedQuestionPreferences)));
+    } catch (e) {
+        console.error("Failed to save question preferences:", e);
+    }
+  }, [usedQuestionPreferences]);
+  
+  useEffect(() => {
+    try {
+        localStorage.setItem('aetherlearn_agentPersonality', agentPersonality);
+    } catch (e) {
+        console.error("Failed to save agent personality:", e);
+    }
+  }, [agentPersonality]);
+
 
   const stopTimer = () => {
     if (timerIntervalRef.current) {
