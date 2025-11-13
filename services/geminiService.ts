@@ -2,10 +2,6 @@
 import { GoogleGenAI, Type, FunctionDeclaration } from "@google/genai";
 import { Quiz, Difficulty, Question, QuizQuestionTypePreference } from '../types';
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable is not set.");
-}
-
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const QUIZ_SCHEMA = {
